@@ -40,5 +40,19 @@
       "PaperName": "HindiPaper",
       "PaperType": "newspaper",
       "Price": 4.8
+   },
+   {
+      "Language": "English",
+      "PaperID": "5",
+      "PaperName": "Hinsutan Times",
+      "PaperType": "Daily",
+      "Price": 12.5
+   },
+   {
+      "Language": "English",
+      "PaperID": "201",
+      "PaperName": "Telegraph",
+      "PaperType": "daily",
+      "Price": 5.0
    }
 ]

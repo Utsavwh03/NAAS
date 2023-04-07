@@ -13,7 +13,7 @@ from tkcalendar import Calendar, DateEntry
 from PIL import ImageTk,Image
 import random
 import datetime
-from datetime import date
+from datetime import datetime, timedelta ,date
 import json
 
 class MainWindow:
@@ -23,48 +23,50 @@ class MainWindow:
         self.master.geometry('1350x750+0+0')
         Grid.rowconfigure(self.master, 0, weight=1)
         Grid.columnconfigure(self.master, 0, weight=1)
-        self.frame = Frame(self.master, width=1350, height=750)
+        self.frame = Frame(self.master, width=2000, height=1000)
         self.frame.pack()
         self.frame.grid_propagate(False)
-        bg = ImageTk.PhotoImage(Image.open("./Data/Newspapers.jpg"))
+        im=Image.open("./Data/Newspapers.jpg")
+        resize_image=im.resize((2000,1000),Image.LANCZOS )
+        bg = ImageTk.PhotoImage(resize_image)
         img_label = Label(self.frame, image=bg)
         img_label.place(x=0, y=0)
 
 
-        self.labelTitle = Label(self.frame, text = "Newspaper Agency Automation Software", font=('arial', 30, 'bold'), fg="#222730", bg="#b6b2ad", bd=20)
+        self.labelTitle = Label(self.frame, text = "Newspaper Agency Automation Software", font=('arial', 30, 'bold'), fg="#222730", bg='AntiqueWhite2', bd=20)
         #self.labelTitle.grid(row=0, column=0, pady=(0,40),padx=(0,50))
         self.labelTitle.place(in_=self.frame, anchor="c", relx=.5, rely=.123)
 
         #====================             FRAMES             ===================================================================================
 
-        self.frame1 = Frame(self.frame, width=542, height=90, bd=2, relief='solid',padx=12,pady=12,bg="#7D8CA3")
+        self.frame1 = Frame(self.frame, width=542, height=90, bd=2, relief='solid',padx=12,pady=12,bg="#5F5F9E")
         self.frame1.place(in_=self.frame, anchor="c", relx=.5, rely=.25)
         #self.frame1.grid(row=1, column=0, sticky="")
         self.frame1.grid_propagate(False)
 
-        self.frame2 = Frame(self.frame, width=542, height=180, bd=2, relief='solid',padx=12,bg="#7D8CA3")
+        self.frame2 = Frame(self.frame, width=542, height=180, bd=2, relief='solid',padx=12,bg="#5F5F9E")
         self.frame2.place(in_=self.frame, anchor="c", relx=.5, rely=.44)
         #self.frame2.grid(row=2, column=0)
         self.frame2.grid_propagate(False)
 
-        self.frame3 = Frame(self.frame, width=542, height=70, bd=2, relief='solid',padx=12,bg="#7D8CA3")
+        self.frame3 = Frame(self.frame, width=542, height=70, bd=2, relief='solid',padx=12,bg="#5F5F9E")
         self.frame3.place(in_=self.frame, anchor="c", relx=.5, rely=.61)
         #self.frame3.grid(row=3, column=0)
         self.frame3.grid_propagate(False)
 
         # ====================             DROP DOWN MENU  (FRAME 1)         ===================================================================================
 
-        self.labelUserType = Label(self.frame1, text = "USER TYPE   ", font = ('arial',12,'bold'),bg="#7D8CA3", padx=12)
+        self.labelUserType = Label(self.frame1, text = "USER TYPE   ", font = ('arial',12,'bold'),bg="#5F5F9E", padx=12)
         self.labelUserType.grid(row=0, column=0, padx=(50,10))
 
         self.clickedUser = StringVar()
         self.clickedUser.set("Select User Type")
         self.users = ["Manager", "Deliverer"]
         self.usersDrop =OptionMenu(self.frame1, self.clickedUser, *self.users)
-        self.usersDrop.config(font = ('arial',10,'bold'))
+        self.usersDrop.config(font = ('arial',10,'bold'),bg="#FFFFD3")
         self.usersDrop.grid(row=0, column=1, padx=(50,50))
 
-        self.labelSetDate = Label(self.frame1, text="SET DATE  ", font=('arial', 12, 'bold'),bg="#7D8CA3", padx=12)
+        self.labelSetDate = Label(self.frame1, text="SET DATE  ", font=('arial', 12, 'bold'),bg="#5F5F9E", padx=12)
         self.labelSetDate.grid(row=1, column=0, padx=(50, 0), pady=10)
 
         self.calSetDate = DateEntry(self.frame1, width=20, background="#b6b2ad",
@@ -73,21 +75,21 @@ class MainWindow:
 
         # ===========             USERNAME AND PASSWORD (FRAME 2)            ===================================================================================
 
-        self.labelUser = Label(self.frame2, text = "USERNAME / USER ID   ", font = ('arial',12,'bold'),bg="#7D8CA3", bd=20)
+        self.labelUser = Label(self.frame2, text = "USERNAME / USER ID   ", font = ('arial',12,'bold'),bg="#5F5F9E", bd=20)
         self.labelUser.grid(row=0, column=0, columnspan=2, pady=10)
         self.username = StringVar()
-        self.eUsername = Entry(self.frame2, width=30,font=('arial', 12), bg="white", fg="black", relief="solid", borderwidth=1, textvariable=self.username)
+        self.eUsername = Entry(self.frame2, width=30,font=('arial', 12), bg="#FFFFD3", fg="black", relief="solid", borderwidth=1, textvariable=self.username)
         self.eUsername.grid(row=0, column=2, columnspan=2, pady=10)
 
-        self.labelPass = Label(self.frame2, text="PASSWORD   ", font=('arial', 12, 'bold'),bg="#7D8CA3", bd=20)
+        self.labelPass = Label(self.frame2, text="PASSWORD   ", font=('arial', 12, 'bold'),bg="#5F5F9E", bd=20)
         self.labelPass.grid(row=1, column=0, columnspan=2, pady=10)
         self.password = StringVar()
-        self.ePass = Entry(self.frame2, show="*", width=30,font=('arial', 12), bg="white", fg="black", relief="solid", borderwidth=1, textvariable=self.password)
+        self.ePass = Entry(self.frame2, show="*", width=30,font=('arial', 12), bg="#FFFFD3", fg="black", relief="solid", borderwidth=1, textvariable=self.password)
         self.ePass.grid(row=1, column=2, columnspan=2, pady=10)
 
         # ===========            LOGIN RESET EXIT (FRAME 3)            ===================================================================================
 
-        self.btnLogin = Button(self.frame3, text="Login", command=lambda: self.decide(), font=('arial', 12, 'bold'), width=13)
+        self.btnLogin = Button(self.frame3, text="Login",bg='red',command=lambda: self.decide(), font=('arial', 12, 'bold'), width=13)
         self.btnLogin.grid(row=0, column=0, padx=11, pady=11)
 
         self.btnReset = Button(self.frame3, text="Reset", command=lambda: self.reset(), font=('arial', 12, 'bold'), width=15)
@@ -158,7 +160,7 @@ class ManagerWindow:
 
         # ====================             FRAMES             ===================================================================================
 
-        self.frame1 = Frame(self.frame, width=1000, height=100, bd=7, relief='ridge', bg = "SkyBlue2")
+        self.frame1 = Frame(self.frame, width=1000, height=100, bd=7, relief='ridge', bg = 'burlywood3')
         self.frame1.grid(row=0, column=0, sticky="news")
 
         self.frame2 = Frame(self.frame, width=800, height=200, bd=7, relief='ridge', padx=12)
@@ -203,11 +205,11 @@ class ManagerWindow:
         # ====================       CUSTOMER DETAILS FRAME            ===================================================================================
 
         self.frameDetails = Frame(self.frame2, width=1000, height=100, bd=7, relief='ridge',
-                                  bg="SkyBlue2")
+                                  bg="burlywood3")
         self.frameDetails.grid(row=1, column=0)
 
 
-        self.labelName = Label(self.frameDetails, text="Full Name ", font=('arial', 12, 'bold'), bd=10, bg="SkyBlue2", justify=LEFT)
+        self.labelName = Label(self.frameDetails, text="Full Name ", font=('arial', 12, 'bold'), bd=10, bg="burlywood3", justify=LEFT)
         self.labelName.grid(row=0, column=0, rowspan=2)
         self.name = StringVar()
         self.eName = Entry(self.frameDetails, width=30, font=('arial', 12), bg="white", fg="black", relief="solid", borderwidth=1,
@@ -217,7 +219,7 @@ class ManagerWindow:
 
 
         self.labelID = Label(self.frameDetails, text="Customer ID", font=('arial', 12, 'bold'), bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
         self.labelID.grid(row=0, column=1, rowspan=2)
         self.cID = StringVar()
         self.ecID = Entry(self.frameDetails, width=12, font=('arial', 12), bg="white", fg="black", relief="solid",
@@ -228,7 +230,7 @@ class ManagerWindow:
 
 
         self.labelPhoneNumber = Label(self.frameDetails, text="Phone Number", font=('arial', 12, 'bold'), bd=10,
-                                      bg="SkyBlue2", justify = LEFT)
+                                      bg="burlywood3", justify = LEFT)
         self.labelPhoneNumber.grid(row=0, column=2, rowspan=2)
         self.phNo = StringVar()
         self.ePhNo = Entry(self.frameDetails, width=12, font=('arial', 12), bg="white", fg="black", relief="solid", borderwidth=1,
@@ -238,13 +240,13 @@ class ManagerWindow:
         # ====================            ADDRESS DETAILS            ===================================================================================
 
         self.labelAddress = Label(self.frameDetails, text="Address", font=('arial', 12, 'bold'), bd=20,
-                                      bg="SkyBlue2")
+                                      bg="burlywood3")
         self.labelAddress.grid(row=0, column=3, columnspan=3)
 
 
 
         self.labelStreetNo = Label(self.frameDetails, text="Street No.", font=('arial', 10, 'bold'), bd=10,
-                                  bg="SkyBlue2", justify=LEFT)
+                                  bg="burlywood3", justify=LEFT)
         self.labelStreetNo.grid(row=1, column=4)
         self.SNo = IntVar()
         self.eSNo = Entry(self.frameDetails, width=5, font=('arial', 12), bg="white", fg="black", relief="solid", borderwidth=1,
@@ -254,7 +256,7 @@ class ManagerWindow:
 
 
         self.labelRoadNo = Label(self.frameDetails, text="Road No.", font=('arial', 10, 'bold'), bd=10,
-                                   bg="SkyBlue2", justify=LEFT)
+                                   bg="burlywood3", justify=LEFT)
         self.labelRoadNo.grid(row=1, column=5)
         self.RNo = IntVar()
         self.eRNo = Entry(self.frameDetails, width=5, font=('arial', 12), bg="white", fg="black", relief="solid", borderwidth=1,
@@ -263,7 +265,7 @@ class ManagerWindow:
 
 
         self.labelHouseNo = Label(self.frameDetails, text="House No.", font=('arial', 10, 'bold'), bd=10,
-                                 bg="SkyBlue2", justify=LEFT)
+                                 bg="burlywood3", justify=LEFT)
         self.labelHouseNo.grid(row=1, column=6)
         self.HNo = StringVar()
         self.eHNo = Entry(self.frameDetails, width=5, font=('arial', 12), bg="white", fg="black", relief="solid", borderwidth=1,
@@ -338,7 +340,7 @@ class ManagerWindow:
             messagebox.showwarning("Empty Entries!", "Fill all the Entries", parent=self.master)
         elif self.cID.get() in IDs:
             messagebox.showerror("Unique IDs", "Enter a unique ID", parent=self.master)
-        elif len(self.PhNo.get())!=10:
+        elif len(self.phNo.get())!=10:
             messagebox.showwarning("Invlaid Phone Number", "Enter a valid Phone Number", parent=self.master)
         elif self.phNo.get() in l:
             c = ""
@@ -428,44 +430,44 @@ class ManagerWindow:
 
         # ====================            DETAILS FRAME            ===================================================================
         self.frameDetails = Frame(self.frame2, width=1000, height=100, bd=7, relief='ridge', padx=12, pady=12,
-                                  bg="SkyBlue2")
+                                  bg="burlywood3")
         self.frameDetails.grid(row=1, column=0)
 
-        self.paperid = Label(self.frameDetails, text="Paper Id ", font=('arial', 12, 'bold'), bd=10, bg="SkyBlue2")
+        self.paperid = Label(self.frameDetails, text="Paper Id ", font=('arial', 12, 'bold'), bd=10, bg="burlywood3")
         self.paperid.grid(row=0, column=0)
         self.pid = StringVar()
         self.ePaperID = Entry(self.frameDetails, width=20, font=('arial', 12), bg="white", fg="black", relief="solid", borderwidth=1,
                           textvariable=self.pid)
         self.ePaperID.grid(row=1, column=0, padx=10)
 
-        self.paperName = Label(self.frameDetails, text="Paper Name ", font=('arial', 12, 'bold'), bd=10, bg="SkyBlue2")
+        self.paperName = Label(self.frameDetails, text="Paper Name ", font=('arial', 12, 'bold'), bd=10, bg="burlywood3")
         self.paperName.grid(row=0, column=1)
         self.pName = StringVar()
         self.ePaperName = Entry(self.frameDetails, width=20, font=('arial', 12), bg="white", fg="black", relief="solid", borderwidth=1, textvariable=self.pName)
         self.ePaperName.grid(row=1, column=1, padx=10)
 
-        self.paperType = Label(self.frameDetails, text="Paper Type ", font=('arial', 12, 'bold'), bd=10, bg="SkyBlue2")
+        self.paperType = Label(self.frameDetails, text="Paper Type ", font=('arial', 12, 'bold'), bd=10, bg="burlywood3")
         self.paperType.grid(row=2, column=1)
         self.pType = StringVar()
         self.ePaperType = Entry(self.frameDetails, width=20, font=('arial', 12), bg="white", fg="black",relief="solid", borderwidth=1, textvariable=self.pType)
         self.ePaperType.grid(row=3, column=1, padx=10)
 
         self.paperLanguage = Label(self.frameDetails, text="Language ", font=('arial', 12, 'bold'), bd=10,
-                                   bg="SkyBlue2")
+                                   bg="burlywood3")
         self.paperLanguage.grid(row=2, column=0)
 
 
         self.v = StringVar(self.frameDetails, "English")
         self.values = {"English": "English", "Hindi": "Hindi", "Telugu": "Telugu"}
-        Radiobutton(self.frameDetails, text="English", variable=self.v, bg="skyblue2", font=('arial',10),
+        Radiobutton(self.frameDetails, text="English", variable=self.v, bg="burlywood3", font=('arial',10),
                         value="English").grid(row=3, column=0)
-        Radiobutton(self.frameDetails, text="Hindi", variable=self.v, bg="skyblue2",font=('arial',10),
+        Radiobutton(self.frameDetails, text="Hindi", variable=self.v, bg="burlywood3",font=('arial',10),
                           value="Hindi").grid(row=4, column=0)
-        Radiobutton(self.frameDetails, text="Telugu", variable=self.v, bg="skyblue2", font=('arial',10),
+        Radiobutton(self.frameDetails, text="Telugu", variable=self.v, bg="burlywood3", font=('arial',10),
                           value="Telugu").grid(row=5, column=0)
 
 
-        self.paperPrice = Label(self.frameDetails, text="Price", font=('arial', 12, 'bold'), bd=10, bg="SkyBlue2")
+        self.paperPrice = Label(self.frameDetails, text="Price", font=('arial', 12, 'bold'), bd=10, bg="burlywood3")
         self.paperPrice.grid(row=4, column=1)
         self.pPrice = DoubleVar()
         self.ePrice = Entry(self.frameDetails, width=20, font=('arial', 12), bg="white", fg="black", relief="solid",
@@ -504,18 +506,18 @@ class ManagerWindow:
 
         # ====================            DETAILS FRAME            ===================================================================
         self.frameEditPub = Frame(self.frame2, width=2000, height=500, bd=7, relief='flat', padx=12, pady=12,
-                                  bg="SkyBlue2")
+                                  bg="burlywood3")
         self.frameEditPub.grid(row=1, column=0)
-        self.Language = Label(self.frameEditPub, text="Language ", font=('arial', 12, 'bold'), bd=10, bg="SkyBlue2")
+        self.Language = Label(self.frameEditPub, text="Language ", font=('arial', 12, 'bold'), bd=10, bg="burlywood3")
         self.Language.grid(row=0, column=0)
         self.v1 = StringVar(self.frameEditPub, "English")
-        Radiobutton(self.frameEditPub, text="English", variable=self.v1, font=('arial', 10), bg="SkyBlue2",
+        Radiobutton(self.frameEditPub, text="English", variable=self.v1, font=('arial', 10), bg="burlywood3",
                     command=lambda: self.dropDownPubForSub1(),
                     value="English").grid(row=1, column=0, padx=5)
-        Radiobutton(self.frameEditPub, text="Hindi", variable=self.v1, font=('arial', 10), bg="SkyBlue2",
+        Radiobutton(self.frameEditPub, text="Hindi", variable=self.v1, font=('arial', 10), bg="burlywood3",
                     command=lambda: self.dropDownPubForSub1(),
                     value="Hindi").grid(row=1, column=1, padx=5)
-        Radiobutton(self.frameEditPub, text="Telugu", variable=self.v1, font=('arial', 10), bg="SkyBlue2",
+        Radiobutton(self.frameEditPub, text="Telugu", variable=self.v1, font=('arial', 10), bg="burlywood3",
                     command=lambda: self.dropDownPubForSub1(),
                     value="Telugu").grid(row=1, column=2, padx=5)
 
@@ -546,68 +548,68 @@ class ManagerWindow:
                                     bd=20)
             self.labelTitle.grid(row=0, column=0, columnspan=2, pady=40)
             self.frameDetails = Frame(self.frame2, width=1000, height=100, bd=7, relief='ridge',
-                                      bg="SkyBlue2")
+                                      bg="burlywood3")
             self.frameDetails.grid(row=1, column=0)
 
             self.labelPubID = Label(self.frameDetails, text="Publication ID : ", font=('arial', 10, 'bold'), bd=10,
-                                    bg="SkyBlue2", justify=LEFT)
+                                    bg="burlywood3", justify=LEFT)
             self.labelPubID.grid(row=1, column=0)
             self.labelPubName = Label(self.frameDetails, text="Publication Name : ", font=('arial', 10, 'bold'), bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
             self.labelPubName.grid(row=2, column=0)
             self.labelPubLang = Label(self.frameDetails, text="Publication Language : ", font=('arial', 10, 'bold'),
                                       bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
             self.labelPubLang.grid(row=3, column=0)
 
             self.labelPubType = Label(self.frameDetails, text="Publication Type : ", font=('arial', 10, 'bold'), bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
             self.labelPubType.grid(row=4, column=0)
 
             self.labelPubPrice = Label(self.frameDetails, text="Publication Price : ", font=('arial', 10, 'bold'), bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
             self.labelPubPrice.grid(row=5, column=0)
 
             self.labelPrevPub = Label(self.frameDetails, text="Previous Values", font=('arial', 10, 'bold'), bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
             self.labelPrevPub.grid(row=0, column=1)
 
             self.labelPubID = Label(self.frameDetails, text=sPublications[pubName].paper_id, font=('arial', 10, 'bold'),
                                     bd=10,
-                                    bg="SkyBlue2", justify=LEFT)
+                                    bg="burlywood3", justify=LEFT)
             self.labelPubID.grid(row=1, column=1)
             self.labelPubName = Label(self.frameDetails, text=sPublications[pubName].paper_name, font=('arial', 10, 'bold'), bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
             self.labelPubName.grid(row=2, column=1)
             self.labelPubLang = Label(self.frameDetails, text=sPublications[pubName].language, font=('arial', 10, 'bold'),
                                       bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
             self.labelPubLang.grid(row=3, column=1)
             self.labelPubType = Label(self.frameDetails, text=sPublications[pubName].paper_type, font=('arial', 10, 'bold'), bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
             self.labelPubType.grid(row=4, column=1)
             self.labelPubPrice = Label(self.frameDetails, text=sPublications[pubName].price, font=('arial', 10, 'bold'),
                                        bd=10,
-                                       bg="SkyBlue2", justify=LEFT)
+                                       bg="burlywood3", justify=LEFT)
             self.labelPubPrice.grid(row=5, column=1)
 
             self.labelNewPub = Label(self.frameDetails, text="Change Values", font=('arial', 10, 'bold'), bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
             self.labelNewPub.grid(row=0, column=2)
 
             self.labelPubID = Label(self.frameDetails, text=sPublications[pubName].paper_id, font=('arial', 10, 'bold'),
                                     bd=10,
-                                    bg="SkyBlue2", justify=LEFT)
+                                    bg="burlywood3", justify=LEFT)
             self.labelPubID.grid(row=1, column=2)
 
             self.labelPubLang = Label(self.frameDetails, text=sPublications[pubName].language,
                                       font=('arial', 10, 'bold'),
                                       bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
             self.labelPubLang.grid(row=3, column=2)
             self.labelPubType = Label(self.frameDetails, text=sPublications[pubName].paper_type,
                                       font=('arial', 10, 'bold'), bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
             self.labelPubType.grid(row=4, column=2)
 
 
@@ -680,9 +682,9 @@ class ManagerWindow:
                                 bd=20)
         self.labelTitle.grid(row=0, column=0, columnspan=2, pady=40)
 
-        self.editFrame = Frame(self.frame2, width=542, height=70, bd=7, bg="SkyBlue2", relief='ridge', padx=12, pady=12)
+        self.editFrame = Frame(self.frame2, width=542, height=70, bd=7, bg="burlywood3", relief='ridge', padx=12, pady=12)
         self.editFrame.grid(row=1, column=1)
-        self.labelUser = Label(self.editFrame, text="Cutomer ID   ", font=('arial', 12, 'bold'), bg="SkyBlue2", bd=20)
+        self.labelUser = Label(self.editFrame, text="Cutomer ID   ", font=('arial', 12, 'bold'), bg="burlywood3", bd=20)
         self.labelUser.grid(row=1, column=0, padx=20)
         self.editID = StringVar()
         self.eUsername = Entry(self.editFrame, width=30, font=('arial', 12), bg="white", fg="black", relief="solid",
@@ -690,7 +692,7 @@ class ManagerWindow:
                                textvariable=self.editID)
         self.eUsername.grid(row=2, column=0, padx=20)
 
-        self.labelUser = Label(self.editFrame, text="Customer Name  ", font=('arial', 12, 'bold'), bg="SkyBlue2", bd=20)
+        self.labelUser = Label(self.editFrame, text="Customer Name  ", font=('arial', 12, 'bold'), bg="burlywood3", bd=20)
         self.labelUser.grid(row=1, column=1, padx=20)
         self.editName = StringVar()
         self.eUsername = Entry(self.editFrame, width=30, font=('arial', 12), bg="white", fg="black", relief="solid",
@@ -737,41 +739,41 @@ class ManagerWindow:
         self.labelTitle = Label(self.frame2, text="Edit Address", font=('arial', 15, 'bold'), bd=20)
         self.labelTitle.grid(row=0, column=0, columnspan=2, pady=40)
         self.frameDetails = Frame(self.frame2, width=1000, height=100, bd=7, relief='ridge',
-                                  bg="SkyBlue2")
+                                  bg="burlywood3")
         self.frameDetails.grid(row=1, column=0)
 
         self.labelStreetNo = Label(self.frameDetails, text="Street No.", font=('arial', 10, 'bold'), bd=10,
-                                   bg="SkyBlue2", justify=LEFT)
+                                   bg="burlywood3", justify=LEFT)
         self.labelStreetNo.grid(row=1, column=3)
         self.labelRoadNo = Label(self.frameDetails, text="Road No.", font=('arial', 10, 'bold'), bd=10,
-                                 bg="SkyBlue2", justify=LEFT)
+                                 bg="burlywood3", justify=LEFT)
         self.labelRoadNo.grid(row=2, column=3)
         self.labelHouseNo = Label(self.frameDetails, text="House No.", font=('arial', 10, 'bold'), bd=10,
-                                  bg="SkyBlue2", justify=LEFT)
+                                  bg="burlywood3", justify=LEFT)
         self.labelHouseNo.grid(row=3, column=3)
         # ====================            Previous Address        ===================================================================
         self.prevAddress = Label(self.frameDetails, text="Previous Address", font=('arial', 10, 'bold'), bd=10,
-                                 bg="SkyBlue2", justify=LEFT)
+                                 bg="burlywood3", justify=LEFT)
         self.prevAddress.grid(row=0, column=4)
 
         self.labelPrevStreetNo = Label(self.frameDetails, text=customer["Address"][0], font=('arial', 10, 'bold'),
                                        bd=10,
-                                       bg="SkyBlue2", justify=LEFT)
+                                       bg="burlywood3", justify=LEFT)
         self.labelPrevStreetNo.grid(row=1, column=4)
 
         self.labelPrevRoadNo = Label(self.frameDetails, text=customer["Address"][1], font=('arial', 10, 'bold'),
                                      bd=10,
-                                     bg="SkyBlue2", justify=LEFT)
+                                     bg="burlywood3", justify=LEFT)
         self.labelPrevRoadNo.grid(row=2, column=4)
 
         self.labelPrevHouseNo = Label(self.frameDetails, text=customer["Address"][2], font=('arial', 10, 'bold'),
                                       bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
         self.labelPrevHouseNo.grid(row=3, column=4)
 
         # ====================            New Address        ========================================================
         self.prevAddress = Label(self.frameDetails, text="New Address", font=('arial', 10, 'bold'), bd=10,
-                                 bg="SkyBlue2", justify=LEFT)
+                                 bg="burlywood3", justify=LEFT)
         self.prevAddress.grid(row=0, column=5)
         self.SNo = IntVar()
         self.eSNo = Entry(self.frameDetails, width=5, font=('arial', 12), bg="white", fg="black", relief="solid",
@@ -858,43 +860,43 @@ class ManagerWindow:
         self.labelTitle = Label(self.frame2, text="Edit Duration", font=('arial', 15, 'bold'), bd=20)
         self.labelTitle.grid(row=0, column=0, columnspan=2, pady=40)
         self.frameDetails = Frame(self.frame2, width=1000, height=100, bd=7, relief='ridge',
-                                  bg="SkyBlue2")
+                                  bg="burlywood3")
         self.frameDetails.grid(row=1, column=0)
 
         self.labelPubID = Label(self.frameDetails, text="Publication ID : ", font=('arial', 10, 'bold'), bd=10,
-                                   bg="SkyBlue2", justify=LEFT)
+                                   bg="burlywood3", justify=LEFT)
         self.labelPubID.grid(row=1, column=3)
         self.labelPubName = Label(self.frameDetails, text="Publication Name : ", font=('arial', 10, 'bold'), bd=10,
-                                 bg="SkyBlue2", justify=LEFT)
+                                 bg="burlywood3", justify=LEFT)
         self.labelPubName.grid(row=2, column=3)
         self.labelPubLang = Label(self.frameDetails, text="Publication Language : ", font=('arial', 10, 'bold'), bd=10,
-                                  bg="SkyBlue2", justify=LEFT)
+                                  bg="burlywood3", justify=LEFT)
         self.labelPubLang.grid(row=3, column=3)
 
 
         # ====================            Previous Address        ===================================================================
         self.prevValues = Label(self.frameDetails, text="Previous Values", font=('arial', 10, 'bold'), bd=10,
-                                 bg="SkyBlue2", justify=LEFT)
+                                 bg="burlywood3", justify=LEFT)
         self.prevValues.grid(row=0, column=4)
 
         self.labelPrevStreetNo = Label(self.frameDetails, text=customer["Address"][0], font=('arial', 10, 'bold'),
                                        bd=10,
-                                       bg="SkyBlue2", justify=LEFT)
+                                       bg="burlywood3", justify=LEFT)
         self.labelPrevStreetNo.grid(row=1, column=4)
 
         self.labelPrevRoadNo = Label(self.frameDetails, text=customer["Address"][1], font=('arial', 10, 'bold'),
                                      bd=10,
-                                     bg="SkyBlue2", justify=LEFT)
+                                     bg="burlywood3", justify=LEFT)
         self.labelPrevRoadNo.grid(row=2, column=4)
 
         self.labelPrevHouseNo = Label(self.frameDetails, text=customer["Address"][2], font=('arial', 10, 'bold'),
                                       bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
         self.labelPrevHouseNo.grid(row=3, column=4)
 
         # ====================            New Address        ========================================================
         self.prevAddress = Label(self.frameDetails, text="New Address", font=('arial', 10, 'bold'), bd=10,
-                                 bg="SkyBlue2", justify=LEFT)
+                                 bg="burlywood3", justify=LEFT)
         self.prevAddress.grid(row=0, column=5)
         self.SNo = IntVar()
         self.eSNo = Entry(self.frameDetails, width=5, font=('arial', 12), bg="white", fg="black", relief="solid",
@@ -1119,7 +1121,7 @@ class ManagerWindow:
 
     def summary(self):
         self.reset()
-        self.frame1.destroy()
+        # self.frame1.destroy()
 
         # ====================            ADD CUST0MERS HEADING             ===================================================================================
 
@@ -1130,62 +1132,62 @@ class ManagerWindow:
         # ====================       CUSTOMER DETAILS FRAME            ===================================================================================
 
         self.frameDetails = Frame(self.frame2, width=1000, height=1000, bd=7, relief='ridge',
-                                  bg="SkyBlue2")
+                                  bg="burlywood3")
         self.frameDetails.grid(row=1, column=0)
 
         # self.btnEditEnter = Button(self.frame2, text="Return", command=lambda: self.addCustomers(),
         #                            font=('arial', 12, 'bold'), width=20)
         # self.btnEditEnter.grid(row=0, column=2, padx=40, pady=25)
 
-        self.labelName = Label(self.frameDetails, text="Full Name ", font=('arial', 12, 'bold'), bd=10, bg="SkyBlue2",
+        self.labelName = Label(self.frameDetails, text="Full Name ", font=('arial', 12, 'bold'), bd=10, bg="burlywood3",
                                justify=LEFT)
         self.labelName.grid(row=0, column=0, rowspan=2)
 
 
         self.labelID = Label(self.frameDetails, text="Customer ID", font=('arial', 12, 'bold'), bd=10,
-                             bg="SkyBlue2", justify=LEFT)
+                             bg="burlywood3", justify=LEFT)
         self.labelID.grid(row=0, column=1, rowspan=2)
 
 
         self.labelPhoneNumber = Label(self.frameDetails, text="Phone Number", font=('arial', 12, 'bold'), bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
         self.labelPhoneNumber.grid(row=0, column=2, rowspan=2)
         # ====================            ADDRESS DETAILS            ===================================================================================
 
         self.labelAddress = Label(self.frameDetails, text="Address", font=('arial', 12, 'bold'), bd=20,
-                                  bg="SkyBlue2")
+                                  bg="burlywood3")
         self.labelAddress.grid(row=0, column=3, columnspan=4)
 
         self.labelStreetNo = Label(self.frameDetails, text="Street No.", font=('arial', 10, 'bold'), bd=10,
-                                   bg="SkyBlue2", justify=LEFT)
+                                   bg="burlywood3", justify=LEFT)
         self.labelStreetNo.grid(row=1, column=4)
 
         self.labelRoadNo = Label(self.frameDetails, text="Road No.", font=('arial', 10, 'bold'), bd=10,
-                                 bg="SkyBlue2", justify=LEFT)
+                                 bg="burlywood3", justify=LEFT)
         self.labelRoadNo.grid(row=1, column=5)
 
         self.labelHouseNo = Label(self.frameDetails, text="House No.", font=('arial', 10, 'bold'), bd=10,
-                                  bg="SkyBlue2", justify=LEFT)
+                                  bg="burlywood3", justify=LEFT)
         self.labelHouseNo.grid(row=1, column=6)
         # ====================            Subscriptions           ===================================================================================
         self.labelSubscriptions=Label(self.frameDetails, text="Subscription", font=('arial', 12, 'bold'), bd=20,
-                                  bg="SkyBlue2")
+                                  bg="burlywood3")
         self.labelSubscriptions.grid(row=0,column=7,columnspan=6)
 
         self.labelSubscriptionsName=Label(self.frameDetails, text="Subscription Name", font=('arial', 10, 'bold'), bd=10,
-                                   bg="SkyBlue2", justify=LEFT)
+                                   bg="burlywood3", justify=LEFT)
         self.labelSubscriptionsName.grid(row=1,column=7)
 
         self.labelSubscriptionsID = Label(self.frameDetails, text="Subscription ID", font=('arial', 10, 'bold'), bd=10,
-                                            bg="SkyBlue2", justify=LEFT)
+                                            bg="burlywood3", justify=LEFT)
         self.labelSubscriptionsID.grid(row=1, column=8)
 
         self.labelSubscriptionsFromDate = Label(self.frameDetails, text="From Date", font=('arial', 10, 'bold'), bd=10,
-                                            bg="SkyBlue2", justify=LEFT)
+                                            bg="burlywood3", justify=LEFT)
         self.labelSubscriptionsFromDate.grid(row=1, column=9)
 
         self.labelSubscriptionsToDate = Label(self.frameDetails, text="To Date", font=('arial', 10, 'bold'), bd=10,
-                                            bg="SkyBlue2", justify=LEFT)
+                                            bg="burlywood3", justify=LEFT)
         self.labelSubscriptionsToDate.grid(row=1, column=10)
 
         ind=2
@@ -1193,41 +1195,43 @@ class ManagerWindow:
         for i in customers:
             flag=False
             for j in i.subscriptions:
-                if j.from_date <= SetDate and j.to_date >= SetDate-datetime.timedelta(days=31):
+                
+                j.from_date = datetime.strptime(j.from_date, '%Y-%m-%d').date()
+                if j.from_date <= SetDate and j.to_date >= SetDate - datetime.timedelta(days=31):
                     flag=True
                     break
             if flag==True:
                 self.labelSubscriptionsToDate = Label(self.frameDetails, text=i.name, font=('arial', 10, 'bold'), bd=10,
-                                                      bg="SkyBlue2", justify=LEFT)
+                                                      bg="burlywood3", justify=LEFT)
                 self.labelSubscriptionsToDate.grid(row=ind, column=0)
                 self.labelSubscriptionsToDate = Label(self.frameDetails, text=i.ID, font=('arial', 10, 'bold'), bd=10,
-                                                      bg="SkyBlue2", justify=LEFT)
+                                                      bg="burlywood3", justify=LEFT)
                 self.labelSubscriptionsToDate.grid(row=ind, column=1)
                 self.labelSubscriptionsToDate = Label(self.frameDetails, text=i.phone_number,
                                                       font=('arial', 10, 'bold'), bd=10,
-                                                      bg="SkyBlue2", justify=LEFT)
+                                                      bg="burlywood3", justify=LEFT)
                 self.labelSubscriptionsToDate.grid(row=ind, column=2)
                 self.labelSubscriptionsToDate = Label(self.frameDetails, text=i.address.street_number,
                                                       font=('arial', 10, 'bold'), bd=10,
-                                                      bg="SkyBlue2", justify=LEFT)
+                                                      bg="burlywood3", justify=LEFT)
                 self.labelSubscriptionsToDate.grid(row=ind, column=4)
                 self.labelSubscriptionsToDate = Label(self.frameDetails, text=i.address.road_number,
                                                       font=('arial', 10, 'bold'), bd=10,
-                                                      bg="SkyBlue2", justify=LEFT)
+                                                      bg="burlywood3", justify=LEFT)
                 self.labelSubscriptionsToDate.grid(row=ind, column=5)
                 self.labelSubscriptionsToDate = Label(self.frameDetails, text=i.address.house_number,
                                                       font=('arial', 10, 'bold'), bd=10,
-                                                      bg="SkyBlue2", justify=LEFT)
+                                                      bg="burlywood3", justify=LEFT)
                 self.labelSubscriptionsToDate.grid(row=ind, column=6)
                 for j in i.subscriptions:
                     if j.from_date <= SetDate and j.to_date >= SetDate-datetime.timedelta(days=31):
                         self.labelSubscriptionsToDate = Label(self.frameDetails, text=j.publication.paper_name,
                                                               font=('arial', 10, 'bold'), bd=10,
-                                                              bg="SkyBlue2", justify=LEFT)
+                                                              bg="burlywood3", justify=LEFT)
                         self.labelSubscriptionsToDate.grid(row=ind, column=7)
                         self.labelSubscriptionsToDate = Label(self.frameDetails, text=j.publication.paper_id,
                                                               font=('arial', 10, 'bold'), bd=10,
-                                                              bg="SkyBlue2", justify=LEFT)
+                                                              bg="burlywood3", justify=LEFT)
                         self.labelSubscriptionsToDate.grid(row=ind, column=8)
                         format="%d/%m/%Y"
                         # now=date.today()
@@ -1235,13 +1239,13 @@ class ManagerWindow:
                         j.from_date=now.strftime(format)
                         self.labelSubscriptionsToDate = Label(self.frameDetails, text=j.from_date,
                                                               font=('arial', 10, 'bold'), bd=10,
-                                                              bg="SkyBlue2", justify=LEFT)
+                                                              bg="burlywood3", justify=LEFT)
                         self.labelSubscriptionsToDate.grid(row=ind, column=9)
                         now=j.to_date
                         j.to_date=now .strftime(format)
                         self.labelSubscriptionsToDate = Label(self.frameDetails, text=j.to_date,
                                                               font=('arial', 10, 'bold'), bd=10,
-                                                              bg="SkyBlue2", justify=LEFT)
+                                                              bg="burlywood3", justify=LEFT)
                         self.labelSubscriptionsToDate.grid(row=ind, column=10)
                         ind = ind + 1
 
@@ -1262,11 +1266,11 @@ class ManagerWindow:
         # ====================       CUSTOMER DETAILS FRAME            ===================================================================================
 
         self.frameDetails = Frame(self.frame2, width=1000, height=100, bd=7, relief='ridge',
-                                  bg="SkyBlue2")
+                                  bg="burlywood3")
         self.frameDetails.grid(row=1, column=0)
 
         self.labelName = Label(self.frameDetails, text="Deliverer Name ", font=('arial', 12, 'bold'), bd=10,
-                               bg="SkyBlue2", justify=LEFT)
+                               bg="burlywood3", justify=LEFT)
         self.labelName.grid(row=0, column=0, rowspan=2)
         self.name = StringVar()
         self.eName = Entry(self.frameDetails, width=30, font=('arial', 12), bg="white", fg="black", relief="solid",
@@ -1275,7 +1279,7 @@ class ManagerWindow:
         self.eName.grid(row=2, column=0, padx=10)
 
         self.labelID = Label(self.frameDetails, text="Deliverer ID", font=('arial', 12, 'bold'), bd=10,
-                             bg="SkyBlue2", justify=LEFT)
+                             bg="burlywood3", justify=LEFT)
         self.labelID.grid(row=0, column=1, rowspan=2)
         self.cID = StringVar()
         self.ecID = Entry(self.frameDetails, width=12, font=('arial', 12), bg="white", fg="black", relief="solid",
@@ -1284,7 +1288,7 @@ class ManagerWindow:
         self.ecID.grid(row=2, column=1, padx=10)
 
         self.labelPassword = Label(self.frameDetails, text="Deliverer Password", font=('arial', 12, 'bold'), bd=10,
-                                   bg="SkyBlue2", justify=LEFT)
+                                   bg="burlywood3", justify=LEFT)
         self.labelPassword.grid(row=0, column=2, rowspan=2)
         self.password = StringVar()
         self.epassword = Entry(self.frameDetails, width=12, font=('arial', 12), bg="white", fg="black", relief="solid",
@@ -1305,7 +1309,8 @@ class ManagerWindow:
         else:
             IDs.append(self.cID.get())
             deliverers_.append({"Username":  self.name.get(), "UserID":  self.cID.get(), "Password": self.password.get()})
-            json.dump(deliverers_, open("./Data/DelivererDetails.json", "w"), indent=3, sort_keys=True)
+            with open("./Data/DelivererDetails.json", "w") as write_file:
+             json.dump(deliverers_,write_file, indent=3, sort_keys=True)
             messagebox.showinfo("Success", "Deliverer added successfully", parent=self.master)
 
     def delivererDetails(self):
@@ -1316,11 +1321,11 @@ class ManagerWindow:
         self.labelAddDeliverer.grid(row=0, column=0, columnspan=2, pady=40)
 
         self.frameDetails = Frame(self.frame2, width=1000, height=1000, bd=7, relief='ridge',
-                                  bg="SkyBlue2")
+                                  bg="burlywood3")
         self.frameDetails.grid(row=1, column=0)
 
         self.labeldName = Label(self.frameDetails, text="Deliverer Name", font=('arial', 10, 'bold'), bd=10,
-                                   bg="SkyBlue2", justify=LEFT)
+                                   bg="burlywood3", justify=LEFT)
         self.labeldName.grid(row=0, column=0)
         self.dName = StringVar()
         self.edName = Entry(self.frameDetails, width=12, font=('arial', 12), bg="white", fg="black", relief="solid",
@@ -1330,7 +1335,7 @@ class ManagerWindow:
 
 
         self.labeldID = Label(self.frameDetails, text="Deliverer ID", font=('arial', 10, 'bold'), bd=10,
-                                   bg="SkyBlue2", justify=LEFT)
+                                   bg="burlywood3", justify=LEFT)
         self.labeldID.grid(row=1, column=0)
 
         self.dID = StringVar()
@@ -1364,7 +1369,7 @@ class ManagerWindow:
                     for k in j.subscriptions:
                         if k.from_date <= SetDate and k.to_date >= SetDate:
                             self.wage+=0.025*k.publication.price
-        self.labelWage = Label(self.frameDetails, text="Today's Wage : "+str(self.wage), font=('arial', 12, 'bold'), bg="SkyBlue2", bd=20)
+        self.labelWage = Label(self.frameDetails, text="Today's Wage : "+str(self.wage), font=('arial', 12, 'bold'), bg="burlywood3", bd=20)
         self.labelWage.grid(row=2, column=1, padx=20)
 
     def customerBills(self):
@@ -1373,9 +1378,9 @@ class ManagerWindow:
                                 bd=20)
         self.labelTitle.grid(row=0, column=0, columnspan=2, pady=40)
 
-        self.editFrame = Frame(self.frame2, width=542, height=70, bd=7, bg="SkyBlue2", relief='ridge', padx=12, pady=12)
+        self.editFrame = Frame(self.frame2, width=542, height=70, bd=7, bg="burlywood3", relief='ridge', padx=12, pady=12)
         self.editFrame.grid(row=1, column=1)
-        self.labelUser = Label(self.editFrame, text="Cutomer ID   ", font=('arial', 12, 'bold'), bg="SkyBlue2", bd=20)
+        self.labelUser = Label(self.editFrame, text="Cutomer ID   ", font=('arial', 12, 'bold'), bg="burlywood3", bd=20)
         self.labelUser.grid(row=1, column=0, padx=20)
         self.editID = StringVar()
         self.eUsername = Entry(self.editFrame, width=30, font=('arial', 12), bg="white", fg="black", relief="solid",
@@ -1383,7 +1388,7 @@ class ManagerWindow:
                                textvariable=self.editID)
         self.eUsername.grid(row=2, column=0, padx=20)
 
-        self.labelUser = Label(self.editFrame, text="Customer Name  ", font=('arial', 12, 'bold'), bg="SkyBlue2", bd=20)
+        self.labelUser = Label(self.editFrame, text="Customer Name  ", font=('arial', 12, 'bold'), bg="burlywood3", bd=20)
         self.labelUser.grid(row=1, column=1, padx=20)
         self.editName = StringVar()
         self.eUsername = Entry(self.editFrame, width=30, font=('arial', 12), bg="white", fg="black", relief="solid",
@@ -1416,31 +1421,31 @@ class ManagerWindow:
                                        bd=20)
         self.labelAddCustomers.grid(row=0, column=0, columnspan=2, pady=40)
         self.frameDetails = Frame(self.frame2, width=1000, height=100, bd=7, relief='ridge',
-                                  bg="SkyBlue2")
+                                  bg="burlywood3")
         self.frameDetails.grid(row=1, column=0)
         self.subscriptionDetails = LabelFrame(self.frame2, text="Subscriptions", width=1000, height=100, bd=7,
                                               relief='ridge')
         self.subscriptionDetails.grid(row=2, column=0)
-        self.labelName = Label(self.frameDetails, text="Full Name ", font=('arial', 12, 'bold'), bd=10, bg="SkyBlue2",
+        self.labelName = Label(self.frameDetails, text="Full Name ", font=('arial', 12, 'bold'), bd=10, bg="burlywood3",
                                justify=LEFT)
         self.labelName.grid(row=0, column=0)
         self.labelName = Label(self.frameDetails, text=customer["CustomerName"], font=('arial', 12, 'bold'), bd=10,
-                               bg="SkyBlue2",
+                               bg="burlywood3",
                                justify=LEFT)
         self.labelName.grid(row=0, column=1)
         self.labelID = Label(self.frameDetails, text="Customer ID", font=('arial', 12, 'bold'), bd=10,
-                             bg="SkyBlue2", justify=LEFT)
+                             bg="burlywood3", justify=LEFT)
         self.labelID.grid(row=1, column=0)
         self.labelID = Label(self.frameDetails, text=customer["CustomerID"], font=('arial', 12, 'bold'), bd=10,
-                             bg="SkyBlue2", justify=LEFT)
+                             bg="burlywood3", justify=LEFT)
         self.labelID.grid(row=1, column=1)
 
         self.labelPhoneNumber = Label(self.frameDetails, text="Phone Number", font=('arial', 12, 'bold'), bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
         self.labelPhoneNumber.grid(row=2, column=0)
         self.labelPhoneNumber = Label(self.frameDetails, text=customer["PhoneNumber"], font=('arial', 12, 'bold'),
                                       bd=10,
-                                      bg="SkyBlue2", justify=LEFT)
+                                      bg="burlywood3", justify=LEFT)
         self.labelPhoneNumber.grid(row=2, column=1)
         # ====================            Subscriptions          ===================================================================================
 
@@ -1539,11 +1544,11 @@ class ManagerWindow:
                                               bd=10, justify=LEFT)
         self.labelSubscriptionsToDate.grid(row=ind, column=6)
         self.labelSubscriptionsToDate = Button(self.subscriptionDetails, text="PAID", font=('arial', 10, 'bold'),
-                                               bd=10, width=10, bg="SkyBlue2", command=lambda: self.changeFromDate(i),
+                                               bd=10, width=10, bg="burlywood3", command=lambda: self.changeFromDate(i),
                                                justify=LEFT)
         self.labelSubscriptionsToDate.grid(row=ind + 1, column=5)
         self.labelSubscriptionsToDate = Button(self.subscriptionDetails, text="EXIT", font=('arial', 10, 'bold'),
-                                               bd=10, width=10, bg="SkyBlue2", command=lambda: self.clear(),
+                                               bd=10, width=10, bg="burlywood3", command=lambda: self.clear(),
                                                justify=LEFT)
         self.labelSubscriptionsToDate.grid(row=ind + 1, column=6)
 
@@ -1561,65 +1566,65 @@ class DelivererWindow:
 
         # ====================             FRAMES             ===================================================================================
 
-        self.frame1 = Frame(self.frame, width=1350, height=750, bd=7, relief='ridge', bg="SkyBlue2")
+        self.frame1 = Frame(self.frame, width=1350, height=750, bd=7, relief='ridge', bg="burlywood3")
         self.frame1.grid(row=0, column=0, sticky="news")
 
         # ====================             LABELS              ===================================================================================
 
-        self.labelCustomerName = Label(self.frame1, text="Customer Name", font=('arial', 10, 'bold'),bg="Skyblue2",
+        self.labelCustomerName = Label(self.frame1, text="Customer Name", font=('arial', 10, 'bold'),bg="burlywood3",
                                        bd=20)
         self.labelCustomerName.grid(row=0, column=0, padx=10, pady=5)
 
-        self.labelPhoneNum = Label(self.frame1, text="Customer Phone Number", font=('arial', 10, 'bold'),bg="Skyblue2",
+        self.labelPhoneNum = Label(self.frame1, text="Customer Phone Number", font=('arial', 10, 'bold'),bg="burlywood3",
                                        bd=20)
         self.labelPhoneNum.grid(row=0, column=1, padx=10, pady=5)
 
-        self.labelStreetNum = Label(self.frame1, text="Street No", font=('arial', 10, 'bold'),bg="Skyblue2",
+        self.labelStreetNum = Label(self.frame1, text="Street No", font=('arial', 10, 'bold'),bg="burlywood3",
                                        bd=20)
         self.labelStreetNum.grid(row=0, column=2, padx=10, pady=5)
 
-        self.labelRoadNum = Label(self.frame1, text="Road No", font=('arial', 10, 'bold'), bg="Skyblue2",
+        self.labelRoadNum = Label(self.frame1, text="Road No", font=('arial', 10, 'bold'), bg="burlywood3",
                                    bd=20)
         self.labelRoadNum.grid(row=0, column=3, padx=10, pady=5)
 
-        self.labelHouseNum = Label(self.frame1, text="House No", font=('arial', 10, 'bold'), bg="Skyblue2",
+        self.labelHouseNum = Label(self.frame1, text="House No", font=('arial', 10, 'bold'), bg="burlywood3",
                                        bd=20)
         self.labelHouseNum.grid(row=0, column=4, padx=10, pady=5)
 
-        self.labelCustomerSub = Label(self.frame1, text="Subscription", font=('arial', 10, 'bold'), bg="Skyblue2",
+        self.labelCustomerSub = Label(self.frame1, text="Subscription", font=('arial', 10, 'bold'), bg="burlywood3",
                                        bd=20)
         self.labelCustomerSub.grid(row=0, column=5, padx=10, pady=5)
 
-        self.labelTFare = Label(self.frame1, text="Total Fare", font=('arial', 10, 'bold'), bg="Skyblue2",
+        self.labelTFare = Label(self.frame1, text="Total Fare", font=('arial', 10, 'bold'), bg="burlywood3",
                                    bd=20)
         self.labelTFare.grid(row=0, column=6, padx=10, pady=5)
 
         # =========================================Printing Details =================================================
         k=0
         for i in deliverer.Customers:
-            self.labelcustomerN = Label(self.frame1, text=i.name, font=('arial', 10, 'bold'),bg="Skyblue2",
+            self.labelcustomerN = Label(self.frame1, text=i.name, font=('arial', 10, 'bold'),bg="burlywood3",
                                            bd=20)
             self.labelcustomerN.grid(row=k+1, column=0, padx=10)
 
-            self.labelcustomerPh = Label(self.frame1, text=i.phone_number, font=('arial', 10, 'bold'),width=15,bg="Skyblue2",
+            self.labelcustomerPh = Label(self.frame1, text=i.phone_number, font=('arial', 10, 'bold'),width=15,bg="burlywood3",
                                        bd=20)
             self.labelcustomerPh.grid(row=k+1, column=1, padx=10)
 
-            self.labelcustomerSt = Label(self.frame1, text=i.address.street_number, font=('arial', 10, 'bold'),bg="Skyblue2",
+            self.labelcustomerSt = Label(self.frame1, text=i.address.street_number, font=('arial', 10, 'bold'),bg="burlywood3",
                                          bd=20)
             self.labelcustomerSt.grid(row=k + 1, column=2, padx=10)
 
-            self.labelcustomerRd = Label(self.frame1, text=i.address.road_number, font=('arial', 10, 'bold'),bg="Skyblue2",
+            self.labelcustomerRd = Label(self.frame1, text=i.address.road_number, font=('arial', 10, 'bold'),bg="burlywood3",
                                          bd=20)
             self.labelcustomerRd.grid(row=k + 1, column=3, padx=10)
 
-            self.labelcustomerHs = Label(self.frame1, text=i.address.house_number, font=('arial', 10, 'bold'),bg="Skyblue2",
+            self.labelcustomerHs = Label(self.frame1, text=i.address.house_number, font=('arial', 10, 'bold'),bg="burlywood3",
                                          bd=20)
             self.labelcustomerHs.grid(row=k + 1, column=4, padx=10)
 
             for j in i.subscriptions :
                 self.labelcustomerSub = Label(self.frame1, text=j.publication.paper_name, font=('arial', 10, 'bold'),
-                                             bg="Skyblue2",
+                                             bg="burlywood3",
                                              bd=20)
                 self.labelcustomerSub.grid(row=k + 1, column=5, padx=10)
                 k=k+1
