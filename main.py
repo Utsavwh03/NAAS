@@ -1196,8 +1196,8 @@ class ManagerWindow:
             flag=False
             for j in i.subscriptions:
                 
-                j.from_date = datetime.strptime(j.from_date, '%Y-%m-%d').date()
-                if j.from_date <= SetDate and j.to_date >= SetDate - datetime.timedelta(days=31):
+                j.from_date = datetime.strptime(str(j.from_date), '%Y-%m-%d').date()
+                if j.from_date <= SetDate and j.to_date >= SetDate - timedelta(days=31):
                     flag=True
                     break
             if flag==True:
@@ -1224,7 +1224,7 @@ class ManagerWindow:
                                                       bg="burlywood3", justify=LEFT)
                 self.labelSubscriptionsToDate.grid(row=ind, column=6)
                 for j in i.subscriptions:
-                    if j.from_date <= SetDate and j.to_date >= SetDate-datetime.timedelta(days=31):
+                    if j.from_date <= SetDate and j.to_date >= SetDate-timedelta(days=31):
                         self.labelSubscriptionsToDate = Label(self.frameDetails, text=j.publication.paper_name,
                                                               font=('arial', 10, 'bold'), bd=10,
                                                               bg="burlywood3", justify=LEFT)
